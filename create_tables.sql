@@ -1,17 +1,16 @@
-create_tables.sql 
 -- Tabela CLIENTE
 CREATE TABLE cliente (
     id_cliente INTEGER PRIMARY KEY AUTOINCREMENT,
     nome TEXT NOT NULL,
-    telefone TEXT(15)
+    telefone CHAR(15)
 );
 
 -- Tabela PET
 CREATE TABLE pet (
-    cod_pet INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome_pet TEXT(30),
-    especie TEXT(30),
-    idade TEXT(30),
+    id_pet INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    especie TEXT NOT NULL,
+    idade INTEGER,
     id_cliente INTEGER,
     FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente)
 );
@@ -20,17 +19,19 @@ CREATE TABLE pet (
 CREATE TABLE veterinario (
     id_veterinario INTEGER PRIMARY KEY AUTOINCREMENT,
     nome TEXT NOT NULL,
-    especialidade TEXT
+    crmv TEXT
 );
 
 -- Tabela CONSULTA
 CREATE TABLE consulta (
     id_consulta INTEGER PRIMARY KEY AUTOINCREMENT,
-    data_consulta DATE,
-    cod_pet INTEGER,
+    data DATE,
+    especie TEXT NOT NULL,
+    idade INTEGER,
+    tipo_servico TEXT NOT NULL,
+    id_pet INTEGER,
     id_veterinario INTEGER,
-    observacoes TEXT,
-    FOREIGN KEY (cod_pet) REFERENCES pet(cod_pet),
+    FOREIGN KEY (id_pet) REFERENCES pet(id_pet),
     FOREIGN KEY (id_veterinario) REFERENCES veterinario(id_veterinario)
 );
 
@@ -38,15 +39,18 @@ CREATE TABLE consulta (
 CREATE TABLE medicamento (
     id_medicamento INTEGER PRIMARY KEY AUTOINCREMENT,
     nome TEXT NOT NULL,
-    tipo TEXT
+    quantidade INTEGER,
+    data_validade DATE
 );
 
 -- Tabela MEDICAMENTO_APLICADO
 CREATE TABLE medicamento_aplicado (
     id_aplicacao INTEGER PRIMARY KEY AUTOINCREMENT,
-    id_consulta INTEGER,
     id_medicamento INTEGER,
-    dosagem TEXT,
-    FOREIGN KEY (id_consulta) REFERENCES consulta(id_consulta),
-    FOREIGN KEY (id_medicamento) REFERENCES medicamento(id_medicamento)
+    id_veterinario INTEGER,
+    id_consulta INTEGER,
+    dose_aplicada FLOAT,
+    FOREIGN KEY (id_medicamento) REFERENCES medicamento(id_medicamento),
+    FOREIGN KEY (id_veterinario) REFERENCES veterinario(id_veterinario),
+    FOREIGN KEY (id_consulta) REFERENCES consulta(id_consulta)
 );
